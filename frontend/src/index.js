@@ -1,11 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './css/style.css';
+import Graph from './component/Graph';
 import registerServiceWorker from './js/registerServiceWorker';
+import './css/style.css';
 
-var a=new Date();
-var b=a.getTime();
-ReactDOM.render(<div>
-    {b}
-</div>, document.getElementById('root'));
+// function test(value) {
+//     console.log('test ' + value);
+// }
+//ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+    //onNvEvent={test}
+    <Graph id="cy" a="aa" />
+    , document.getElementById('root'));
 registerServiceWorker();
