@@ -34,7 +34,6 @@ export default class Graph extends Component {
     }
 
 
-
     get cy() {
         if (this._cy == null) {
 
@@ -42,33 +41,50 @@ export default class Graph extends Component {
             //cy.autoungrabify( true );
             cy.boxSelectionEnabled(true);
             cy.zoomingEnabled(false);
-            cy.add({ group: "nodes", data: { id: "n0" }, position: { x: 500, y: 300 }, shape: "rectangle" });
             cy.add({
-                group: "nodes", data: { id: "n1" }, position: { x: 200, y: 300 },
-                style: { 
-                    shape: "rectangle", width: 300, height: 100, 
+                group: "nodes", data: { id: "parent" }, position: { x: 200, y: 300 },
+                style: {
+                    shape: "rectangle", width: 300, height: 500,
                     'background-color': 'red',
+                    'padding': '30px'
                 }
             });
+
+            cy.add({ group: "nodes", data: { id: "n0" }, position: { x: 500, y: 300 } });
+
             cy.add({
-                group: "nodes", data: { id: "n4", parent: 'n1' }, position: { x: 200, y: 300 },
+                group: "nodes", data: { id: "n4", parent: 'parent' }, position: { x: 200, y: 300 },
 
             });
             cy.add({
-                group: "nodes", data: { id: "n5", parent: 'n1' }, position: { x: 150, y: 300 },
-
-            });
-            cy.add({
-                group: "nodes", data: { id: "n6", parent: 'n1' }, position: { x: 150, y: 300 },
+                group: "nodes", data: { id: "n5", parent: 'parent' }, position: { x: 150, y: 300 },
 
             });
 
-            cy.batch(function () {
-                cy.$('#j')
-                    .data('weight', '70')
-                    .addClass('square')
-                    ;
-            });
+            cy.$('#n0').on('free', function (evt) {
+
+                var node = evt.target;
+                var bnd = cy.$('#parent').boundingBox();
+
+                var position = evt.target.position();
+                var x = position.x;
+                var y = position.y;
+                var isInX = x > bnd.x1 && x < bnd.x2;
+                var isInY = y > bnd.y1 && y < bnd.y2;
+                var isIn = isInX && isInY;
+                if (isIn) node.move({ parent: 'parent' });
+                console.log('free');
+            })
+
+            cy.$('#n0').on('position', function (evt) {
+                var node = evt.target;
+                node.move({ parent: null });
+                console.log('drag');
+            })
+
+
+
+
 
             this.setState({ cy: cy });
 

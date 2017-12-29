@@ -10,6 +10,6 @@ import './css/style.css';
 //ReactDOM.render(<App />, document.getElementById('root'));
 ReactDOM.render(
     //onNvEvent={test}
-    <Graph id="cy" a="aa" />
+    <Graph id="cy" />
     , document.getElementById('root'));
 registerServiceWorker();
