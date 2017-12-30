@@ -15,10 +15,22 @@ export default class Node extends Element {
         var result = new Point(x, y);
         return result;
     }
-
     set Position(value) {
         this.Refrence.position('x', value.X);
         this.Refrence.position('y', value.Y);
     }
+
+    get Parent() {
+        var result = this.Refrence.parent()[0];
+        return result;
+        //.parent( [selector] )
+    }
+
+    set Parent(value) {
+        var cyElement = this.Refrence.move({ parent: (value ? value.UID : null) });
+        this.Refrence = cyElement;
+    }
+
+
 
 }

@@ -4,29 +4,67 @@ import registerServiceWorker from './js/registerServiceWorker';
 import './css/style.css';
 import GraphView from './component/graph/graphview';
 import Graph from './component/graph/graph';
-import Node from './component/graph/node';
 import Point from './component/graph/point';
 import Selection from './component/gallery/selection';
+import Alternative from './component/gallery/alternative';
+import Node from './component/graph/node';
 
 var graph = new Graph('graphview');
 var callback = function () {
-    graph.AllowZoom = false;
+    var a1 = graph.Add(Alternative);
+    a1.Position = new Point(100, 100);
+    var a2 = graph.Add(Alternative);
+    a2.Position = new Point(200, 200);
+    var a3 = graph.Add(Alternative);
+    a3.Style.Css('background-color', 'red');
+    a3.Position = new Point(300, 150);
+
     var s1 = graph.Add(Selection);
-    s1.Position = new Point(200, 200);
-    s1.Width = 300;
-    s1.Height = 200;
+    s1.Position = new Point(400, 400);
 
-    for (let i = 0; i < 10; i++) {
-        var location = (i + 1) * 70;
-        var n1 = graph.Add(Node);
-        n1.Position = new Point(location, 30);
-        n1.Style.Css('background-size', 'mapData(bar, 0, 10, 0, 100)');
-        //n1.Style.Shape = 'triangle';
-        if (i === 2) {
-            n1.Style.Css('background-color', 'blue');
-        }
+    a1.Style.Css('background-color', 'Magenta');
+
+    a1.Parent = s1;
+    a2.Parent = s1;
+
+
+    a3.OnDrop = function (element) {
+        var cy=element.Graph.Refrence;
+        var clon = element.Refrence.add();
+        cy.add({
+            group: "nodes", data: { parent: s1.UID  }, position: { x: 200, y: 300 },
+
+        });
+        //clon.data({ parent: 'sss', height: 176 });
+        // console.log(clon.data());
+        // clon.move({ parent: s1.UID });
+        // var a4 = new Alternative(clon);
+        // graph.Add(a4);
+        //s1.Refrence.add(clon);
+        //a4.Parent = s1;
+        //var a4 = graph.Add(a4);
+        //a4.Refrence=clon;
     }
+    //a1.Sele=s1;
+    //a2.Parent=s1;
+    // var a = null;
+    // a3.OnDrag= function (element) {
+    //     //console.log(element);
+    //     //element.Parent=s1;
+    //     //console.log(element.Parent);
+    //     console.log(element.Position);
+    //     a = s1.Add(a3);
+    // }
+    // a3.OnDrop = function (element) {
+    //     //console.log(element);
+    //     //element.Parent=s1;
+    //     //console.log(element.Parent);
+    //     console.log(a);
+    //     //a = s1.Add(a3);
+    // }
 
+    //a3
+    //a3.Refrence=a;
 };
 
 var root = document.getElementById('root');

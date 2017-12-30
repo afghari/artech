@@ -6,8 +6,19 @@ export default class Selection extends Node {
         super(refrence);
         this.Style.Shape = 'rectangle';
         this.Style.Css('background-color', 'green');
-        this.Width=100;
-        this.Height=100;
+        this.Width = 100;
+        this.Height = 100;
+
+        this._beforeChildAddPosition = this.Position;
+        this.OnBeforeChildAdd = function (sender, child) {
+            //sender._beforeChildAddPosition = sender.Position;
+            //child.Position=sender.Position;
+            //console.log(sender.Position);
+        }
+        this.OnAfterChildAdd = function (sender, child) {
+        
+        }
+
     }
 
     get Width() { var result = this.Style.Css('width'); return result; }
