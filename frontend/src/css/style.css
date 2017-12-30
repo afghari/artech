@@ -5,9 +5,9 @@ body {
   margin: 0px;
 }
 
-#cy {
-  width: 1000px;
-  height: 600px;
+#graphview {
+  width: 800px;
+  height: 500px;
   background-color: aqua;
 }
 
