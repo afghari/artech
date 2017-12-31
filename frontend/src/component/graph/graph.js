@@ -1,19 +1,68 @@
 import cytoscape from 'cytoscape';
 import Node from './node';
+import $ from 'jquery';
 
+class MyCS extends cytoscape {
+    constructor(value) {
+        super(value);
+        this.style()._private.coreStyle['selection-box-color'].value = [0, 0, 0];
+        this.style()._private.coreStyle['active-bg-size'].pfValue = 0;
+    }
+}
 export default class Graph {
 
     constructor(id) {
         this.ID = id;
         this.Refrence = null;
-
     }
 
     Load() {
+
         var domElement = document.getElementById(this.ID);
-        var cy = new cytoscape({ container: domElement });
+
+        var cy = new MyCS({ container: domElement });
+        // cy.$('core') // just core properties
+        //     .css({
+        //         'selection-box-color': 'red',
+        //         'selection-box-opacity': 0.65,
+        //         'selection-box-border-color': '#aaa',
+        //         'selection-box-border-width': 1,
+        //         'active-bg-color': 'black',
+        //         'active-bg-opacity': 0.15,
+        //         'active-bg-size': 30,
+        //         'outside-texture-bg-color': '#000',
+        //         'outside-texture-bg-opacity': 0.125
+        //     });
+        //cy.boxSelectionEnabled(false);
+        cy.on('mousedown', function (evt) {
+            // cy.style()._private.coreStyle['selection-box-color'].value=[0, 0,0];
+            // console.log(cy.style()._private.coreStyle['selection-box-color']);
+            //evt.originalEvent.preventDefault();
+            //console.log(evt);
+            //evt.originalEvent.preventDefault();
+            //console.log(evt.originalEvent);
+
+        });
+
+        // var cy = cytoscape({
+        //     container: domElement,
+        //     elements: [/* ... */],
+        //     options: {
+        //         style: [
+        //             {
+        //                 selector: 'node, edge',
+        //                 style: {
+        //                     'overlay-opacity': 0,
+        //                 },
+        //             },
+        //         ],
+        //     },
+        // });
+
+        //cy.autolock(true);
+
         this.Refrence = cy;
-        cy.Owner = this;
+        this.AllowUserPanning = false;
     }
 
 
@@ -36,17 +85,10 @@ export default class Graph {
         return result;
     }
 
-    get Zoomable() {
-        var cy = this.Refrence;
-        var result = cy.zoomingEnabled();
-        return result;
-    }
+    get Zoomable() { return this.Refrence.zoomingEnabled(); }
+    set Zoomable(value) { this.Refrence.zoomingEnabled(value); }
 
-    set Zoomable(value) {
-        var cy = this.Refrence;
-        cy.zoomingEnabled(value);
-    }
-
-
+    get AllowUserPanning() { return this.Refrence.userPanningEnabled(); }
+    set AllowUserPanning(value) { this.Refrence.userPanningEnabled(value); }
 
 }

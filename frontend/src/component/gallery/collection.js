@@ -1,6 +1,6 @@
 import Node from "../graph/node";
 
-export default class Selection extends Node {
+export default class Collection extends Node {
 
     constructor(refrence) {
         super(refrence);

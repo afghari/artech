@@ -13,12 +13,8 @@ import Collection from './component/gallery/collection';
 var graph = new Graph('graphview');
 var callback = function () {
 
-    //var c1 = graph.Add(Collection);
+    var c1 = graph.Add(Collection);
 
-    for (let i = 1; i < 10; i++) {
-        var a1 = graph.Add(Alternative);
-        a1.Position = new Point(i*50, 100);
-    }
     // var a1 = graph.Add(Alternative);
     // a1.Position = new Point(100, 100);
     // var a2 = graph.Add(Alternative);
@@ -81,4 +77,5 @@ var callback = function () {
 
 var root = document.getElementById('root');
 ReactDOM.render(<GraphView graph={graph} />, root, callback);
-registerServiceWorker();
+registerServiceWorker()
+
