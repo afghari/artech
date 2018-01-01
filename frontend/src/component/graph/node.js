@@ -1,13 +1,13 @@
-import Element from './element';
 import Point from './point';
-import NodeStyle from './nodestyle';
+//import NodeStyle from './nodestyle';
+import NodeBase from './nodebase';
 
-export default class Node extends Element {
+export default class Node extends NodeBase {
 
-    constructor(refrence) {
-        super(refrence);
-        this.Style = new NodeStyle(this);
-    }
+    // constructor(s) 
+    // {
+    //     super(s);    
+    // }
 
     get Position() {
         var x = this.Refrence.position('x');
@@ -16,20 +16,22 @@ export default class Node extends Element {
         return result;
     }
     set Position(value) {
-        this.Refrence.position('x', value.X);
-        this.Refrence.position('y', value.Y);
+        this.Refrence.shift('x', value.X);
+        this.Refrence.shift('y', value.Y);
+        // this.Refrence.position('x', value.X);
+        // this.Refrence.position('y', value.Y);
     }
 
-    get Parent() {
-        var result = this.Refrence.parent()[0];
-        return result;
-        //.parent( [selector] )
-    }
+    // get Parent() {
+    //     var result = this.Refrence.parent()[0];
+    //     return result;
+    //     //.parent( [selector] )
+    // }
 
-    set Parent(value) {
-        var cyElement = this.Refrence.move({ parent: (value ? value.UID : null) });
-        this.Refrence = cyElement;
-    }
+    // set Parent(value) {
+    //     var cyElement = this.Refrence.move({ parent: (value ? value.UID : null) });
+    //     this.Refrence = cyElement;
+    // }
 
 
 

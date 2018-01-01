@@ -5,16 +5,21 @@ import './css/style.css';
 import GraphView from './component/graph/graphview';
 import Graph from './component/graph/graph';
 import Point from './component/graph/point';
-import Selection from './component/gallery/collection';
-import Alternative from './component/gallery/alternative';
+//import Alternative from './component/gallery/alternative';
 import Node from './component/graph/node';
-import Collection from './component/gallery/collection';
+//import Collection from './component/gallery/collection';
 
 var graph = new Graph('graphview');
 var callback = function () {
 
-    var c1 = graph.Add(Collection);
+    //var c1 = graph.Add(Collection);
 
+    for (let i = 1; i < 10; i++) {
+
+        var node=new Node();
+        // var a1 = graph.Add(Alternative);
+        // a1.Position = new Point(i*50, 100);
+    }
     // var a1 = graph.Add(Alternative);
     // a1.Position = new Point(100, 100);
     // var a2 = graph.Add(Alternative);
@@ -77,5 +82,4 @@ var callback = function () {
 
 var root = document.getElementById('root');
 ReactDOM.render(<GraphView graph={graph} />, root, callback);
-registerServiceWorker()
-
+registerServiceWorker();

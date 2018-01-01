@@ -1,7 +1,7 @@
 import Node from "../graph/node";
 
 export default class Alternative extends Node {
-    constructor(refrence) {
-        super(refrence);
-    }
+    // constructor(refrence) {
+    //     super(refrence);
+    // }
 }
