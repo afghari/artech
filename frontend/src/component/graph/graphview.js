@@ -12,7 +12,19 @@ export default class GraphView extends Component {
     }
 
     componentDidMount() {
-        this.Graph.Load();
+        this.Graph.OnLoad();
+    }
+
+    componentWillUnmount() {
+
+    }
+
+    onKeyDown(event) {
+        let scrollTop = event.srcElement.body.scrollTop,
+            itemTranslate = Math.min(0, scrollTop / 3 - 60);
+        this.setState({
+            transform: itemTranslate
+        });
     }
 
     render() {

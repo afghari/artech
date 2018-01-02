@@ -1,8 +1,6 @@
 import ContainerBase from "./containerbase";
 import Grip from "./grip";
 import Point from "./point";
-import $ from 'jquery';
-import Node from "./node";
 
 export default class Container extends ContainerBase {
     constructor(refrence) {
@@ -13,6 +11,7 @@ export default class Container extends ContainerBase {
     Append(nodeBase) {
         nodeBase.Position = this.Position;
         nodeBase.Refrence.move({ parent: this.ID });
+        nodeBase.OnLoad();
     }
 
     get Children() {
@@ -20,7 +19,6 @@ export default class Container extends ContainerBase {
     }
 
     OnLoad() {
-        this.Style('background-color', 'green');
         for (var i = 0; i < 2; i++) {
             var grip = this.Graph.Add(Grip);
             grip.Container = this;

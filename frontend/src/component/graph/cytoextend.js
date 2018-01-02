@@ -1,4 +1,5 @@
 import cytoscape from 'cytoscape';
+//import cytoscape from './cytoscape';
 
 export default class CytoExtend extends cytoscape {
     constructor(value) {
@@ -10,4 +11,9 @@ export default class CytoExtend extends cytoscape {
         //this.style()._private.coreStyle['active-bg-opacity'].pfValue = 0;
         //this.style()._private.coreStyle['selection-box-border-width'].value=300;
     }
+
+    // on()
+    // {
+    //     //super.on()
+    // }
 }

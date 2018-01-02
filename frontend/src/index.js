@@ -4,38 +4,27 @@ import ReactDOM from 'react-dom';
 import registerServiceWorker from './js/registerServiceWorker';
 import './css/style.css';
 import GraphView from './component/graph/graphview';
-import Graph from './component/graph/graph';
-import Node from './component/graph/node';
 import Point from './component/graph/point';
-import Container from './component/graph/container';
+import Alternative from './component/gallery/alternative';
+import Collection from './component/gallery/collection';
+import Gallery from './component/gallery/gallery';
 
-var graph = new Graph('graphview');
-graph.Ready = function () {
-    var n1 = graph.Add(Node, 'n1');
-    n1.Position = new Point(100, 100);
+var gallery = new Gallery('graphview');
+gallery.OnReady = function () {
 
-    //var g1 = graph.Add(Grip);
-    //var g2 = graph.Add(Grip);
-
-    var c1 = graph.Add(Container, 'c1');
-    //c1.Append(g1);
-    c1.Position = new Point(200, 200);
-    // n1.OnMove(function (sender) {
-    //     console.log(sender.ID + ':[' + sender.Position.X + ',' + sender.Position.Y + ']');
-    // });
-    //console.log(n1.Position);
-
-    // var cy=graph.Refrence;
-    // cy.$('#g1').style('backgroundColor','red');
-    // cy.$('#g1').style('shape','square');
-    // cy.$('#g1').style('width','10px');
-    // cy.$('#g1').style('height','10px');
-    // cy.$('#g1').style('segment-distances','50px');
-    //cy.$('#g1').style('visibility','hidden');
+    var c1 = gallery.Add(Collection, 'c1');
     
-    
-    //console.log(cy.$('#g1').style());
+    c1.Position = new Point(50, 200);
+    for (let i = 1; i <= 3; i++) {
+        var a1 = gallery.Add(Alternative, 'n' + i);
+        c1.Append(a1);
+        a1.Position = new Point(-30 * i, -10);
+    }
+
+
+    // var c2 = gallery.Add(Collection, 'c2');
+    // c2.Position = new Point(300, 200);
 
 }
-ReactDOM.render(<GraphView graph={graph} />, $('#root')[0]);
+ReactDOM.render(<GraphView graph={gallery} />, $('#root')[0]);
 registerServiceWorker();

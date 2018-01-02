@@ -19111,6 +19111,7 @@ BRp.load = function () {
   };
 
   var isMultSelKeyDown = function isMultSelKeyDown(e) {
+    return false;
     return e.shiftKey || e.metaKey || e.ctrlKey; // maybe e.altKey
   };
 
