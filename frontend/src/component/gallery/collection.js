@@ -16,6 +16,6 @@ export default class Collection extends Container {
 
     OnLoad() {
         super.OnLoad();
-        //this.Selectable = false;
+        this.Selectable = false;
     }
 }

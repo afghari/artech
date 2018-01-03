@@ -13,28 +13,45 @@ export default class Gallery extends Graph {
 
     OnLoad() {
         super.OnLoad();
+        this.setGalleryHeight();
         this.registerModifiers();
         this.registerOnTap();
     }
 
-    registerOnTap() {
+    setGalleryHeight() {
         var _this = this;
-        this.OnTapHandler = function () {
-            if (_this.Modifier1) {
-                _this.Alternatives.forEach(function (a) {
-                    a.Selected = false;
-                });
-            }
-            else if (_this.Modifier2) {
+        var id='#' + _this.ID;
+        $(window).on('resize load', function (event) {
+            var height = $(document).height();
+            $(id).height(height);
+            //console.log();
+        });
+        // $(window).on('keyup keydown', function (e) {
+        //     _this._modifier1 = e.shiftKey;
+        //     _this._modifier2 = e.altKey;
+        //     _this._modifier3 = e.ctrlKey;
+        //     e.preventDefault();
+        // });
+    }
 
-            }
-            else if (_this.Modifier3) {
+    registerOnTap() {
+        // var _this = this;
+        // this.OnTapHandler = function () {
+        //     if (_this.Modifier1) {
+        //         _this.Alternatives.forEach(function (a) {
+        //             a.Selected = false;
+        //         });
+        //     }
+        //     else if (_this.Modifier2) {
 
-            }
-            else {
+        //     }
+        //     else if (_this.Modifier3) {
 
-            }
-        }
+        //     }
+        //     else {
+
+        //     }
+        // }
     }
 
     registerModifiers() {

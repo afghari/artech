@@ -6,18 +6,7 @@ body {
 }
 
 #graphview {
-  width: 800px;
+  width: 100%;
   height: 500px;
-  background-color: aqua;
-}
-
-
-#cy {
-  width: 800px;
-  height: 500px;
-  background-color: aqua;
-}
-
-.square{
-  background-color: blueviolet;
+  background-color:blanchedalmond;
 }

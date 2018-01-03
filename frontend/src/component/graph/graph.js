@@ -30,12 +30,19 @@ export default class Graph {
         result.Graph = this;
         result.ID = id;
         if (type.prototype instanceof NodeBase) {
-            var data = id ? { id: id, owner: result } : {};
+            var data = id ? { id: id, owner: result } : { owner: result };
             var cyNode = cy.add({ groups: "node", data: data });
             result.ID = cyNode.id();
         }
         if (result) result.OnLoad();
         return result;
+    }
+
+    AddByData(data)
+    {
+        var cy = this.Refrence;
+        var cyNode = cy.add(data);
+        return cyNode;
     }
 
 
@@ -54,14 +61,39 @@ export default class Graph {
         });
     }
 
+    getCyElement(id) {
+        var result = this.Refrence.getElementById(id);
+        return result;
+    }
+
+    getOwner(input) {
+        var cyElement = typeof input === "string" ? this.getCyElement(input) : input;
+        var result = cyElement.data('owner');
+        return result;
+    }
+
+    Get(id) {
+        var result = id ? this.getOwner(id) : null;
+        return result;
+    }
+
+    Remove(element) {
+        var cy = this.Refrence;
+        var cyElement = this.getCyElement(element.ID);
+        cy.remove(cyElement);
+    }
+
     get Nodes() {
         var result = [];
         var cy = this.Refrence;
-        var cyNodes = cy.nodes();
-        cyNodes.forEach(element => {
-            var owner = element.data('owner');
+        var cyNodes = cy.nodes().filter();
+        cyNodes.forEach(cyElement => {
+            //var owner = cy.GetOwner(cyElement);
+            var owner = this.getOwner(cyElement);
             if (owner) result.push(owner);
         });
         return result;
     }
+
+
 }

@@ -12,7 +12,7 @@ export default class Grip extends Node {
         //this.Grabbable = false;
         this.Style('shape', 'square');
         this.Style('visibility', 'hidden');
-        this.Style('width', '10px');
-        this.Style('height', '10px');
+        this.Style('width', '1px');
+        this.Style('height', '1px');
     }
 }
