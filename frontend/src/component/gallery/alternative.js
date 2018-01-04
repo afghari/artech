@@ -70,7 +70,8 @@ export default class Alternative extends Node {
 
             }
             else {
-                if (_this.Selected === false) _this.Selected = true;
+                //if (_this.Selected === false) _this.Selected = true;
+                _this.Selected = !_this.Selected;
             }
         }
     }

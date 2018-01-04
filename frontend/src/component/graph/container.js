@@ -34,8 +34,11 @@ export default class Container extends ContainerBase {
 
     Expand(width, height) {
         var grips = this.Grips;
-        var grip = grips[1];
-        grip.Position = new Point(width - 1, height - 1);
+        var g0 = grips[0];
+        g0.Position = this.Position;
+        g0.Move((-width / 2) + 1, (-height / 2) + 1);
+        var g1 = grips[1];
+        g1.Move((width / 2) - 1, (height / 2) - 1);
     }
 
     OnLoad() {

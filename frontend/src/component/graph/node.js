@@ -16,8 +16,13 @@ export default class Node extends NodeBase {
         return result;
     }
     set Position(value) {
-        this.Refrence.shift('x', value.X);
-        this.Refrence.shift('y', value.Y);
+        var deltaX = value.X - this.Position.X;
+        var deltaY = value.Y - this.Position.Y;
+        this.Move(deltaX, deltaY);
+        // this.Refrence.position('x', value.X);
+        // this.Refrence.position('y', value.Y);
     }
+
+    Move(x, y) { this.Refrence.shift({ x: x, y: y }); }
 
 }
