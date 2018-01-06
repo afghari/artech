@@ -146,6 +146,9 @@ gallery.OnReady = function () {
     var c3 = gallery.Add(Collection, 'c3');
     c3.Position = new Point(310, 420);
     c3.Expand(420, 200);
+    var a7 = gallery.Add(Alternative, 'a7');
+    c3.Append(a7);
+    
 }
 ReactDOM.render(<GraphView graph={gallery} />, $('#root')[0]);
 registerServiceWorker();

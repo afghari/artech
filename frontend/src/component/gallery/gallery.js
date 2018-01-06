@@ -57,8 +57,6 @@ export default class Gallery extends Graph {
     registerMouseClick() {
         var _this = this;
         var elementID = '#' + _this.ID;
-        var cy = _this.Refrence;
-
         var middleClick = false;
 
         $(window).on('mousedown', function (e) {
