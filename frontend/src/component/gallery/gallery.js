@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import Graph from "../graph/graph";
 import Alternative from './alternative';
+import Collection from './collection';
 
 export default class Gallery extends Graph {
 
@@ -9,59 +10,6 @@ export default class Gallery extends Graph {
         this._modifier1 = false;
         this._modifier2 = false;
         this._modifier3 = false;
-    }
-
-    OnLoad() {
-        super.OnLoad();
-        this.setGalleryHeight();
-        this.registerModifiers();
-        this.registerOnTap();
-    }
-
-    setGalleryHeight() {
-        var _this = this;
-        var id='#' + _this.ID;
-        $(window).on('resize load', function (event) {
-            var height = $(document).height();
-            $(id).height(height);
-            //console.log();
-        });
-        // $(window).on('keyup keydown', function (e) {
-        //     _this._modifier1 = e.shiftKey;
-        //     _this._modifier2 = e.altKey;
-        //     _this._modifier3 = e.ctrlKey;
-        //     e.preventDefault();
-        // });
-    }
-
-    registerOnTap() {
-        // var _this = this;
-        // this.OnTapHandler = function () {
-        //     if (_this.Modifier1) {
-        //         _this.Alternatives.forEach(function (a) {
-        //             a.Selected = false;
-        //         });
-        //     }
-        //     else if (_this.Modifier2) {
-
-        //     }
-        //     else if (_this.Modifier3) {
-
-        //     }
-        //     else {
-
-        //     }
-        // }
-    }
-
-    registerModifiers() {
-        var _this = this;
-        $(window).on('keyup keydown', function (e) {
-            _this._modifier1 = e.shiftKey;
-            _this._modifier2 = e.altKey;
-            _this._modifier3 = e.ctrlKey;
-            e.preventDefault();
-        });
     }
 
     get Modifier1() {
@@ -82,4 +30,59 @@ export default class Gallery extends Graph {
         });
         return result;
     }
+
+    get Collections() {
+        return super.Containers;
+    }
+
+    OnLoad() {
+        super.OnLoad();
+        this.setGalleryHeight();
+        this.registerModifiers();
+        this.registerOnTap();
+    }
+
+    setGalleryHeight() {
+        var _this = this;
+        var id = '#' + _this.ID;
+        $(window).on('resize load', function (event) {
+            var height = $(document).height();
+            $(id).height(height);
+        });
+    }
+
+    registerModifiers() {
+        var _this = this;
+        $(window).on('keyup keydown', function (e) {
+            _this._modifier1 = e.shiftKey;
+            _this._modifier2 = e.altKey;
+            _this._modifier3 = e.ctrlKey;
+            e.preventDefault();
+        });
+    }
+
+    registerOnTap() {
+        var _this = this;
+        this.OnTapHandler = function (element) {
+            if (!element) {
+                if (_this.Modifier1 && _this.Modifier2) {
+                    _this.Alternatives.forEach(function (alternative) {
+                        alternative.Selected = false;
+                    });
+                }
+                else if (_this.Modifier1) {
+                    _this.Collections.forEach(function (collection) {
+                        collection.Selected = false;
+                    });
+                }
+            }
+            else {
+                if (element instanceof Collection) {
+                    element.OnTapHandler(element);
+                }
+            }
+        }
+    }
+
+
 }

@@ -1,16 +1,10 @@
 import ContainerBase from "./containerbase";
 import Grip from "./grip";
-import Point from "./point";
 
 export default class Container extends ContainerBase {
     constructor(refrence) {
         super(refrence);
         this.StartDimention = { Width: 200, Height: 200 };
-    }
-
-    Append(nodeBase) {
-        nodeBase.Position = this.Position;
-        nodeBase.Parent = this;
     }
 
     get Children() {
@@ -32,13 +26,19 @@ export default class Container extends ContainerBase {
         return result;
     }
 
+    Append(nodeBase) {
+        nodeBase.Position = this.Position;
+        nodeBase.Refrence.move({ parent: this.ID });
+        nodeBase.OnLoad();
+    }
+
     Expand(width, height) {
         var grips = this.Grips;
         var g0 = grips[0];
         g0.Position = this.Position;
-        g0.Move((-width / 2) + 1, (-height / 2) + 1);
+        g0.Move((-width / 2) + 3, (-height / 2) + 3);
         var g1 = grips[1];
-        g1.Move((width / 2) - 1, (height / 2) - 1);
+        g1.Move((width / 2) - 3, (height / 2) - 3);
     }
 
     OnLoad() {
@@ -49,7 +49,7 @@ export default class Container extends ContainerBase {
             grip.Container = _this;
             grip.Corner = i;
             _this.Append(grip);
-            grip.OnLoad();
         }
+
     }
 }

@@ -1,11 +1,15 @@
 export default class Element {
+
     constructor() {
         this.Graph = null;
         this.ID = null;
-        this.OnMoveHandler = function () { }
+        this.OnDragHandler = function () { }
         this.OnBoxHandler = function () { }
         this.OnTapHandler = function () { }
+        this.OnTapStartHandler = function () { }
+        this.OnTapEndHandler = function () { }
         this.OnDragHandler = function () { }
+        this.OnFreeHandler = function () { }
         this.OnGrabOnHandler = function () { }
     }
 
@@ -30,15 +34,21 @@ export default class Element {
 
     get Grabbable() { return this.Refrence.grabbable(); }
     set Grabbable(value) { if (value) this.Refrence.grabify(); else this.Refrence.ungrabify(); }
+    get Grabbed() { return this.Refrence.grabbed(); }
+
 
     get Selected() { return this.Refrence.selected(); }
     set Selected(value) { if (value) this.Refrence.select(); else this.Refrence.unselect(); }
 
+    get Active() { return this.Refrence.active(); }
+
     OnLoad() {
         this.OnMove(function () { });
-        this.OnBox(function () { });
         this.OnTap(function () { });
+        this.OnTapStart(function () { });
+        this.OnTapEnd(function () { });
         this.OnDrag(function () { });
+        this.OnFree(function () { });
         this.OnGrabOn(function () { });
     }
 
@@ -46,16 +56,7 @@ export default class Element {
         var _this = this;
         var refrence = this.Refrence;
         refrence.on('position', function () {
-            _this.OnMoveHandler();
-            callback(_this);
-        });
-    }
-
-    OnBox(callback) {
-        var _this = this;
-        var refrence = this.Refrence;
-        refrence.on('box', function () {
-            _this.OnBoxHandler();
+            _this.OnDragHandler();
             callback(_this);
         });
     }
@@ -69,6 +70,24 @@ export default class Element {
         });
     }
 
+    OnTapStart(callback) {
+        var _this = this;
+        var refrence = this.Refrence;
+        refrence.on('tapstart', function () {
+            _this.OnTapStartHandler();
+            callback(_this);
+        });
+    }
+
+    OnTapEnd(callback) {
+        var _this = this;
+        var refrence = this.Refrence;
+        refrence.on('tapend', function () {
+            _this.OnTapEndHandler();
+            callback(_this);
+        });
+    }
+
     OnDrag(callback) {
         var _this = this;
         var refrence = this.Refrence;
@@ -78,10 +97,19 @@ export default class Element {
         });
     }
 
+    OnFree(callback) {
+        var _this = this;
+        var refrence = this.Refrence;
+        refrence.on('free', function () {
+            _this.OnFreeHandler();
+            callback(_this);
+        });
+    }
+
     OnGrabOn(callback) {
         var _this = this;
         var refrence = this.Refrence;
-        refrence.on('grab', function () {
+        refrence.on('grabon', function () {
             _this.OnGrabOnHandler();
             callback(_this);
         });
