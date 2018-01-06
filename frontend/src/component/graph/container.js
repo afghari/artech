@@ -4,6 +4,7 @@ import Grip from "./grip";
 export default class Container extends ContainerBase {
     constructor(refrence) {
         super(refrence);
+        this.OnTapHandler = function () { }
         this.StartDimention = { Width: 200, Height: 200 };
     }
 
