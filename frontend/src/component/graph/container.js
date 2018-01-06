@@ -56,7 +56,7 @@ export default class Container extends ContainerBase {
 
     OnLoad() {
         var _this = this;
-        _this.Style('padding', '0px');
+        _this.Style('padding', '5px');
         for (var i = 0; i < 2; i++) {
             var grip = this.Graph.Add(Grip);
             grip.Container = _this;
