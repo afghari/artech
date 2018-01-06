@@ -29,7 +29,8 @@ export default class Collection extends Container {
                 _this.Selected = false;
             }
             else {
-                _this.Selected = !_this.Selected;
+                //_this.Selected = !_this.Selected;
+                _this.Selected = true;
             }
         }
     }

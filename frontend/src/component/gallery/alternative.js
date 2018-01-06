@@ -30,7 +30,8 @@ export default class Alternative extends AlternativeBase {
             }
             else {
                 //if (_this.Selected === false) _this.Selected = true;
-                _this.Selected = !_this.Selected;
+                //_this.Selected = !_this.Selected;
+                _this.Selected = true;
             }
         }
     }
