@@ -10,8 +10,6 @@ export default class Graph {
         this.OnReady = function () { }
         this.OnBoxHandler = function () { }
         this.OnTapHandler = function () { }
-        // this.OnBoxStartHandler = function () { }
-        // this.OnBoxEndHandler = function () { }
     }
 
     get Zoomable() { return this.Refrence.zoomingEnabled(); }
@@ -19,6 +17,9 @@ export default class Graph {
 
     get UserPanning() { return this.Refrence.userPanningEnabled(); }
     set UserPanning(value) { this.Refrence.userPanningEnabled(value); }
+
+    get UserZooming() { return this.Refrence.userZoomingEnabled(); }
+    set UserZooming(value) { this.Refrence.userZoomingEnabled(value); }
 
     get Nodes() {
         var result = [];
@@ -88,11 +89,11 @@ export default class Graph {
         });
         this.Refrence = cy;
         this.UserPanning = false;
+        this.UserZooming = false;
+
         this.OnReady();
         this.OnBox(function () { });
         this.OnTap(function () { });
-        // this.OnBoxStart(function () { });
-        // this.OnBoxEnd(function () { });
     }
 
     OnBox(callback) {
@@ -123,24 +124,7 @@ export default class Graph {
         });
     }
 
-    // OnBoxStart(callback) {
-    //     var _this = this;
-    //     var refrence = this.Refrence;
-    //     refrence.on('box', function (e) {
-    //         _this.OnBoxStartHandler();
-    //         console.log(e.target.id());
-    //         callback(_this);
-    //     });
-    // }
-
-    // OnBoxEnd(callback) {
-    //     var _this = this;
-    //     var refrence = this.Refrence;
-    //     refrence.on('boxend', function (e) {
-    //         _this.OnBoxEndHandler();
-    //         callback(_this);
-    //     });
-    // }
-
-
+    PanBy(x, y) {
+        this.Refrence.panBy({ x: x, y: y });
+    }
 }

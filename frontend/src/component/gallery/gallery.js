@@ -12,15 +12,9 @@ export default class Gallery extends Graph {
         this._modifier3 = false;
     }
 
-    get Modifier1() {
-        return this._modifier1;
-    }
-    get Modifier2() {
-        return this._modifier2;
-    }
-    get Modifier3() {
-        return this._modifier3;
-    }
+    get Modifier1() { return this._modifier1; }
+    get Modifier2() { return this._modifier2; }
+    get Modifier3() { return this._modifier3; }
 
     get Alternatives() {
         var nodes = this.Nodes;
@@ -31,14 +25,13 @@ export default class Gallery extends Graph {
         return result;
     }
 
-    get Collections() {
-        return super.Containers;
-    }
+    get Collections() { return super.Containers; }
 
     OnLoad() {
         super.OnLoad();
         this.setGalleryHeight();
         this.registerModifiers();
+        this.registerMouseClick();
         this.registerOnTap();
     }
 
@@ -58,6 +51,41 @@ export default class Gallery extends Graph {
             _this._modifier2 = e.altKey;
             _this._modifier3 = e.ctrlKey;
             e.preventDefault();
+        });
+    }
+
+    registerMouseClick() {
+        var _this = this;
+        var elementID = '#' + _this.ID;
+        var cy = _this.Refrence;
+
+        var middleClick = false;
+
+        $(window).on('mousedown', function (e) {
+            if (e.which === 2) {
+                $(elementID).css('cursor', 'move');
+                middleClick = true;
+                e.preventDefault();
+            }
+        });
+        $(window).on('mouseup', function (e) {
+            if (e.which === 2) {
+                $(elementID).css('cursor', 'default');
+                middleClick = false;
+                e.preventDefault();
+            }
+        });
+
+        var lastPos = null;
+        $(window).on('mousemove', function (e) {
+            if (middleClick) {
+                lastPos = { x: e.clientX, y: e.clientY }
+                setTimeout(() => {
+                    var deltaX = lastPos.x - e.clientX;
+                    var deltaY = lastPos.y - e.clientY;
+                    _this.PanBy(deltaX, deltaY);
+                }, 18);
+            }
         });
     }
 
@@ -83,6 +111,4 @@ export default class Gallery extends Graph {
             }
         }
     }
-
-
 }
