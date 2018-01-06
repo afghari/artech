@@ -2,6 +2,7 @@ import $ from 'jquery';
 import Graph from "../graph/graph";
 import Alternative from './alternative';
 import Collection from './collection';
+import Point from '../graph/point';
 
 export default class Gallery extends Graph {
 
@@ -27,11 +28,17 @@ export default class Gallery extends Graph {
 
     get Collections() { return super.Containers; }
 
+    get SelectedItems() {
+        var result = new GallerySelectedItems(this);
+        return result;
+    }
+
     OnLoad() {
         super.OnLoad();
         this.setGalleryHeight();
         this.registerModifiers();
-        this.registerMouseClick();
+        this.registerMiddleClick();
+        this.registerDoubleTap();
         this.registerOnTap();
     }
 
@@ -54,7 +61,7 @@ export default class Gallery extends Graph {
         });
     }
 
-    registerMouseClick() {
+    registerMiddleClick() {
         var _this = this;
         var elementID = '#' + _this.ID;
         var middleClick = false;
@@ -108,5 +115,58 @@ export default class Gallery extends Graph {
                 }
             }
         }
+    }
+
+    registerDoubleTap() {
+        var _this = this;
+        this.OnDoubleTapHandler = function (element, location) {
+            if (!element) {
+                _this.createMergedCollection(location);
+            }
+            else { }
+        }
+    }
+
+    createMergedCollection(location) {
+        var newCollection = this.Add(Collection);
+        newCollection.Position = location;
+        newCollection.Expand();
+        if (this.SelectedItems.Collections.length > 0) {
+            var selectedCollections = this.SelectedItems.Collections;
+            selectedCollections.forEach(selectedCollection => {
+                var alternatives = selectedCollection.Alternatives;
+                alternatives.forEach(alternative => {
+                    newCollection.AppendCopy(alternative);
+                });
+            });
+        }
+        newCollection.Makeup();
+        newCollection.Selected = true;
+    }
+}
+
+class GallerySelectedItems {
+    constructor(owner) {
+        this.Owner = owner;
+    }
+
+    get Alternatives() {
+        var gallery = this.Owner;
+        var alternatives = gallery.Alternatives;
+        var result = alternatives.filter(function (alternative) {
+            var isSelected = alternative.Selected;
+            return isSelected;
+        });
+        return result;
+    }
+
+    get Collections() {
+        var gallery = this.Owner;
+        var collections = gallery.Collections;
+        var result = collections.filter(function (collection) {
+            var isSelected = collection.Selected;
+            return isSelected;
+        });
+        return result;
     }
 }

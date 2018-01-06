@@ -13,6 +13,11 @@ export default class Alternative extends AlternativeBase {
         this.registerOnBoxHandler();
     }
 
+    Clone() {
+        var clone = this.Refrence.clone();
+        return clone;
+    }
+
     registerOnTap() {
         var _this = this;
         var graph = _this.Graph;

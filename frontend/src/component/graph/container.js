@@ -1,5 +1,6 @@
 import ContainerBase from "./containerbase";
 import Grip from "./grip";
+import NodeBase from "./nodebase";
 
 export default class Container extends ContainerBase {
     constructor(refrence) {
@@ -27,13 +28,24 @@ export default class Container extends ContainerBase {
         return result;
     }
 
+    get Nodes() {
+        var children = this.Children;
+        var result = children.filter(function (node) {
+            var isNode = !(node instanceof Grip);
+            return isNode;
+        });
+        return result;
+    }
+
     Append(nodeBase) {
         nodeBase.Position = this.Position;
         nodeBase.Refrence.move({ parent: this.ID });
         nodeBase.OnLoad();
     }
 
-    Expand(width, height) {
+    Expand(width = null, height = null) {
+        if (!width) width = this.StartDimention.Width;
+        if (!height) height = this.StartDimention.Height;
         var grips = this.Grips;
         var g0 = grips[0];
         g0.Position = this.Position;

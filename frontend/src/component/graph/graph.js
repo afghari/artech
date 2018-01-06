@@ -2,6 +2,7 @@ import $ from 'jquery';
 import CytoExtend from './cytoextend';
 import NodeBase from './nodebase';
 import ContainerBase from './containerbase';
+import Point from './point';
 export default class Graph {
 
     constructor(id) {
@@ -10,6 +11,7 @@ export default class Graph {
         this.OnReady = function () { }
         this.OnBoxHandler = function () { }
         this.OnTapHandler = function () { }
+        this.OnDoubleTapHandler = function () { }
     }
 
     get Zoomable() { return this.Refrence.zoomingEnabled(); }
@@ -113,6 +115,7 @@ export default class Graph {
     OnTap(callback) {
         var _this = this;
         var refrence = this.Refrence;
+        var tapNumber = 0;
         refrence.on('tap', function (event) {
             var element = null;
             if (event.target.length) {
@@ -121,6 +124,15 @@ export default class Graph {
             }
             _this.OnTapHandler(element);
             callback(_this);
+
+            tapNumber++;
+            setTimeout(() => { tapNumber = 0; }, 300);
+            if (tapNumber == 2) {
+                var position = event.position;
+                var location = new Point(position.x, position.y);
+                _this.OnDoubleTapHandler(element, location);
+            }
+
         });
     }
 
