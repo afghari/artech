@@ -1,9 +1,9 @@
 import Container from "../graph/container";
 
 export default class Collection extends Container {
-    // constructor(refrence) {
-    //     super(refrence);
-    // }
+    constructor(refrence) {
+        super(refrence);
+    }
 
     get Selected() {
         return super.Selected;
