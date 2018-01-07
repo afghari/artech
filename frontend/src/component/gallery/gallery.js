@@ -3,6 +3,7 @@ import Graph from "../graph/graph";
 import Alternative from './alternative';
 import Collection from './collection';
 import Point from '../graph/point';
+import Dependent from './dependent';
 
 export default class Gallery extends Graph {
 
@@ -28,8 +29,30 @@ export default class Gallery extends Graph {
 
     get Collections() { return super.Containers; }
 
+    get Dependents() {
+        var alternatives = this.Alternatives;
+        var result = alternatives.filter(function (alternative) {
+            var isDependent = alternative instanceof Dependent;
+            return isDependent;
+        });
+        return result;
+    }
+
     get SelectedItems() {
         var result = new GallerySelectedItems(this);
+        return result;
+    }
+
+    Append(alternative) {
+        var independent = !alternative.Generator;
+        var result = independent ? this.Add(Alternative) :  this.AppendDependent(alternative);
+        return result;
+    }
+
+    AppendDependent(alternative) {
+        var generator = alternative instanceof Dependent ? alternative.Generator : alternative;
+        var result = this.Add(Dependent);
+        result.Generator = generator;
         return result;
     }
 
@@ -121,7 +144,12 @@ export default class Gallery extends Graph {
         var _this = this;
         this.OnDoubleTapHandler = function (element, location) {
             if (!element) {
-                _this.createMergedCollection(location);
+                if (_this.Modifier2) {
+                    _this.createCopyAlternatives(location);
+                }
+                else {
+                    _this.createMergedCollection(location);
+                }
             }
             else { }
         }
@@ -132,16 +160,38 @@ export default class Gallery extends Graph {
         newCollection.Position = location;
         newCollection.Expand();
         if (this.SelectedItems.Collections.length > 0) {
-            var selectedCollections = this.SelectedItems.Collections;
-            selectedCollections.forEach(selectedCollection => {
-                var alternatives = selectedCollection.Alternatives;
+            var collections = this.SelectedItems.Collections;
+            collections.forEach(collection => {
+                var alternatives = collection.Alternatives;
                 alternatives.forEach(alternative => {
-                    newCollection.AppendCopy(alternative);
+                    var newAlternative = this.Append(alternative);
+                    newCollection.Append(newAlternative);
                 });
             });
         }
         newCollection.Makeup();
         newCollection.Selected = true;
+    }
+
+    createCopyAlternatives(location) {
+        var copyAlternatives = [];
+        var alternatives = this.SelectedItems.Alternatives;
+        alternatives.forEach(alternative => {
+            var copyAlternative = this.AppendDependent(alternative);
+            copyAlternatives.push(copyAlternative);
+        });
+        this.Arrange(copyAlternatives, location);
+    }
+
+    Arrange(alternatives, location) {
+        var padding = 15;
+        var nodeDiameter = 30;
+        var currentX = location.X;
+        var currentY = location.Y;
+        alternatives.forEach(alternative => {
+            alternative.Position = new Point(currentX, currentY);
+            currentX += nodeDiameter + padding;
+        });
     }
 }
 

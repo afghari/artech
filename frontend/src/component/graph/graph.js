@@ -82,17 +82,9 @@ export default class Graph {
     }
 
     OnLoad() {
-        var cy = new CytoExtend({
-            container: $('#' + this.ID),
-            zoom: 1,
-            pan: { x: 0, y: 0 },
-            style: [{ selector: 'node', style: { 'overlay-opacity': '0' } }],
-            //autolock: true,
-        });
-        this.Refrence = cy;
+        this.Refrence = new CytoExtend(this.ID);
         this.UserPanning = false;
         this.UserZooming = false;
-
         this.OnReady();
         this.OnBox(function () { });
         this.OnTap(function () { });

@@ -6,17 +6,25 @@ export default class Alternative extends AlternativeBase {
     //     super(refrence);
     // }
 
+    get Dependents() {
+        var _this = this;
+        var dependents = this.Graph.Dependents;
+        var result = dependents.filter(function (dependent) {
+            var isGenerator = dependent.Generator.ID == _this.ID;
+            return isGenerator;
+        });
+        return result;
+    }
+
     OnLoad() {
         super.OnLoad();
+        this.Class('alternative');
         this.registerOnTap();
         this.registerOnSelfDragAndDrop();
         this.registerOnBoxHandler();
+        this.registerOnMouseOverAndOut();
     }
 
-    Clone() {
-        var clone = this.Refrence.clone();
-        return clone;
-    }
 
     registerOnTap() {
         var _this = this;
@@ -69,6 +77,36 @@ export default class Alternative extends AlternativeBase {
             }
             else if (_this.Graph.Modifier2) {
                 _this.Selected = true;
+            }
+        }
+    }
+
+    registerOnMouseOverAndOut() {
+        var _this = this;
+        var gallery = _this.Graph;
+        this.OnMouseOverHandler = function () {
+            if (gallery.Modifier3) {
+                if (!_this.Generator) {
+                    var dependents = _this.Dependents;
+                    dependents.forEach(function (dependent) {
+                        dependent.Class('notice');
+                    });
+                }
+                else {
+                    _this.Generator.Class('notice');
+                }
+            }
+        }
+
+        this.OnMouseOutHandler = function () {
+            if (!_this.Generator) {
+                var dependents = _this.Dependents;
+                dependents.forEach(function (dependent) {
+                    dependent.UnClass('notice');
+                });
+            }
+            else {
+                _this.Generator.UnClass('notice');
             }
         }
     }

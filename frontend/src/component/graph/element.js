@@ -11,12 +11,17 @@ export default class Element {
         this.OnDragHandler = function () { }
         this.OnFreeHandler = function () { }
         this.OnGrabOnHandler = function () { }
+        this.OnMouseOverHandler = function () { }
+        this.OnMouseOutHandler = function () { }
     }
 
     Style(name, value = null) {
         if (!value) return this.Refrence.style(name);
         else this.Refrence.style(name, value);
     }
+
+    Class(name, value = null) { this.Refrence.addClass(name); }
+    UnClass(name) { this.Refrence.removeClass(name); }
 
     Data(name, value = null) {
         if (!value) return this.Refrence.data(name);
@@ -50,6 +55,8 @@ export default class Element {
         this.OnDrag(function () { });
         this.OnFree(function () { });
         this.OnGrabOn(function () { });
+        this.OnMouseOver(function () { });
+        this.OnMouseOut(function () { });
     }
 
     OnMove(callback) {
@@ -111,6 +118,24 @@ export default class Element {
         var refrence = this.Refrence;
         refrence.on('grabon', function () {
             _this.OnGrabOnHandler();
+            callback(_this);
+        });
+    }
+
+    OnMouseOver(callback) {
+        var _this = this;
+        var refrence = this.Refrence;
+        refrence.on('mouseover', function () {
+            _this.OnMouseOverHandler();
+            callback(_this);
+        });
+    }
+
+    OnMouseOut(callback) {
+        var _this = this;
+        var refrence = this.Refrence;
+        refrence.on('mouseout', function () {
+            _this.OnMouseOutHandler();
             callback(_this);
         });
     }

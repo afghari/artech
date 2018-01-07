@@ -18,11 +18,6 @@ export default class Collection extends Container {
 
     get Alternatives() { return super.Nodes; }
 
-    AppendCopy(alternative) {
-        var newAlternative = this.Graph.Add(Alternative);
-        this.Append(newAlternative);
-    }
-
     Makeup() {
         var alternatives = this.Alternatives;
         var i = 1;
@@ -47,6 +42,7 @@ export default class Collection extends Container {
 
     OnLoad() {
         super.OnLoad();
+        this.Class('collection');
         this.Selectable = false;
         this.registerOnBoxHandler();
         this.registerOnTap();
