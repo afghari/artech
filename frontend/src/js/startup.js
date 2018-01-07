@@ -1,1 +1,1 @@
-console.warn = function () { } 
+console.warn = function () { }

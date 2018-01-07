@@ -66,7 +66,6 @@ export default class Container extends ContainerBase {
             var grip = this.Graph.Add(Grip);
             grip.Container = _this;
             grip.Corner = i;
-            //grip.Parent = _this;
             _this.appendGrip(grip);
         }
 

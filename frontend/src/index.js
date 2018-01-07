@@ -37,7 +37,6 @@ gallery.OnReady = function () {
     c3.Expand(420, 200);
     var a = gallery.Add(Alternative);
     c3.Append(a);
-
 }
 ReactDOM.render(<GraphView graph={gallery} />, $('#root')[0]);
 registerServiceWorker();

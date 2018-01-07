@@ -133,6 +133,6 @@ export default class Graph {
     }
 
     ReDraw() {
-        this.Refrence.forceRender()
+        this.Refrence.forceRender();
     }
 }
