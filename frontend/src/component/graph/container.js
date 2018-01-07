@@ -37,10 +37,15 @@ export default class Container extends ContainerBase {
         return result;
     }
 
-    Append(nodeBase) {
-        nodeBase.Position = this.Position;
-        nodeBase.Refrence.move({ parent: this.ID });
-        nodeBase.OnLoad();
+    Append(node) {
+        node.Position = this.Position;
+        node.Parent = this;
+    }
+
+    appendGrip(grip) {
+        grip.Position = this.Position;
+        grip.Refrence.move({ parent: this.ID });
+        grip.OnLoad();
     }
 
     Expand(width = null, height = null) {
@@ -61,7 +66,8 @@ export default class Container extends ContainerBase {
             var grip = this.Graph.Add(Grip);
             grip.Container = _this;
             grip.Corner = i;
-            _this.Append(grip);
+            //grip.Parent = _this;
+            _this.appendGrip(grip);
         }
 
     }

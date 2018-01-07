@@ -131,4 +131,8 @@ export default class Graph {
     PanBy(x, y) {
         this.Refrence.panBy({ x: x, y: y });
     }
+
+    ReDraw() {
+        this.Refrence.forceRender()
+    }
 }
