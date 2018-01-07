@@ -60,7 +60,7 @@ export default class Gallery extends Graph {
         super.OnLoad();
         this.setGalleryHeight();
         this.registerModifiers();
-        this.registerMiddleClick();
+        this.registerOnClick();
         this.registerDoubleTap();
         this.registerOnTap();
     }
@@ -84,7 +84,7 @@ export default class Gallery extends Graph {
         });
     }
 
-    registerMiddleClick() {
+    registerOnClick() {
         var _this = this;
         var elementID = '#' + _this.ID;
         var middleClick = false;
@@ -94,6 +94,11 @@ export default class Gallery extends Graph {
                 $(elementID).css('cursor', 'move');
                 middleClick = true;
                 e.preventDefault();
+            }
+            if(e.which===3)
+            {
+                _this.SelectedItems.Alternatives.forEach((e) => { e.Selected = false; });
+                _this.SelectedItems.Collections.forEach((e) => { e.Selected = false; });
             }
         });
         $(window).on('mouseup', function (e) {
@@ -144,8 +149,11 @@ export default class Gallery extends Graph {
         var _this = this;
         this.OnDoubleTapHandler = function (element, location) {
             if (!element) {
-                if (_this.Modifier2) {
-                    _this.createCopyAlternatives(location);
+                if (_this.Modifier2 && _this.Modifier3) {
+                    _this.createDependents(location);
+                }
+                else if (_this.Modifier2) {
+                    _this.createIndependentAlternatives(location);
                 }
                 else {
                     _this.createMergedCollection(location);
@@ -173,14 +181,24 @@ export default class Gallery extends Graph {
         newCollection.Selected = true;
     }
 
-    createCopyAlternatives(location) {
-        var copyAlternatives = [];
+    createIndependentAlternatives(location) {
+        var newAlternatives = [];
         var alternatives = this.SelectedItems.Alternatives;
         alternatives.forEach(alternative => {
-            var copyAlternative = this.AppendDependent(alternative);
-            copyAlternatives.push(copyAlternative);
+            var newAlternative = this.Append(alternative);
+            newAlternatives.push(newAlternative);
         });
-        this.Arrange(copyAlternatives, location);
+        this.Arrange(newAlternatives, location);
+    }
+
+    createDependents(location) {
+        var newDependents = [];
+        var alternatives = this.SelectedItems.Alternatives;
+        alternatives.forEach(alternative => {
+            var newDependent = this.AppendDependent(alternative);
+            newDependents.push(newDependent);
+        });
+        this.Arrange(newDependents, location);
     }
 
     Arrange(alternatives, location) {

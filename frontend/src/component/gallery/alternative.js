@@ -85,28 +85,38 @@ export default class Alternative extends AlternativeBase {
         var _this = this;
         var gallery = _this.Graph;
         this.OnMouseOverHandler = function () {
-            if (gallery.Modifier3) {
+            if (gallery.Modifier3 && !gallery.Modifier2) {
                 if (!_this.Generator) {
+                    _this.Class('generator');
                     var dependents = _this.Dependents;
                     dependents.forEach(function (dependent) {
-                        dependent.Class('notice');
+                        dependent.Class('child');
                     });
                 }
                 else {
-                    _this.Generator.Class('notice');
+                    _this.Generator.Class('generator');
+                    var dependents = _this.Generator.Dependents;
+                    dependents.forEach(function (dependent) {
+                        dependent.Class('child');
+                    });
                 }
             }
         }
 
         this.OnMouseOutHandler = function () {
             if (!_this.Generator) {
+                _this.UnClass('generator');
                 var dependents = _this.Dependents;
                 dependents.forEach(function (dependent) {
-                    dependent.UnClass('notice');
+                    dependent.UnClass('child');
                 });
             }
             else {
-                _this.Generator.UnClass('notice');
+                _this.Generator.UnClass('generator');
+                var dependents = _this.Generator.Dependents;
+                dependents.forEach(function (dependent) {
+                    dependent.UnClass('child');
+                });
             }
         }
     }

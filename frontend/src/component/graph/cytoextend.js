@@ -14,8 +14,8 @@ export default class CytoExtend extends cytoscape {
                 { selector: '.alternative', style: { 'background-color': '#5b6366' } },
                 { selector: '.alternative:selected', style: { 'border-color': '#fc5f05', 'border-width': '3' } },
                 { selector: '.dependent', style: { 'background-color': '#9eaeb2' } },
-                { selector: '.notice', style: { 'background-color': '#b774f2' } }
-
+                { selector: '.generator', style: { 'background-color': '#b774f2' } },
+                { selector: '.child', style: { 'background-color': '#dabcf4' } }
             ],
         });
         this.style()._private.coreStyle['active-bg-size'].pfValue = 0;
