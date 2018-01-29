@@ -8,20 +8,39 @@ export default class Graph {
     constructor(id) {
         this.ID = id;
         this.Refrence = null;
-        this.OnReady = function () { }
-        this.OnBoxHandler = function () { }
-        this.OnTapHandler = function () { }
-        this.OnDoubleTapHandler = function () { }
+        this.OnReady = function () {}
+        this.OnBoxHandler = function () {}
+        this.OnTapHandler = function () {}
+        this.OnDoubleTapHandler = function () {}
     }
 
-    get Zoomable() { return this.Refrence.zoomingEnabled(); }
-    set Zoomable(value) { this.Refrence.zoomingEnabled(value); }
+    get Zoomable() {
+        return this.Refrence.zoomingEnabled();
+    }
+    set Zoomable(value) {
+        this.Refrence.zoomingEnabled(value);
+    }
 
-    get UserPanning() { return this.Refrence.userPanningEnabled(); }
-    set UserPanning(value) { this.Refrence.userPanningEnabled(value); }
+    get UserPanning() {
+        return this.Refrence.userPanningEnabled();
+    }
+    set UserPanning(value) {
+        this.Refrence.userPanningEnabled(value);
+    }
 
-    get UserZooming() { return this.Refrence.userZoomingEnabled(); }
-    set UserZooming(value) { this.Refrence.userZoomingEnabled(value); }
+    get UserZooming() {
+        return this.Refrence.userZoomingEnabled();
+    }
+    set UserZooming(value) {
+        this.Refrence.userZoomingEnabled(value);
+    }
+
+    get BoxSelectionEnabled() {
+        return this.Refrence.boxSelectionEnabled();
+    }
+    set BoxSelectionEnabled(value) {
+        this.Refrence.boxSelectionEnabled(value);
+    }
 
     get Nodes() {
         var result = [];
@@ -62,8 +81,16 @@ export default class Graph {
         result.Graph = this;
         result.ID = id;
         if (type.prototype instanceof NodeBase) {
-            var data = id ? { id: id, owner: result } : { owner: result };
-            var cyNode = cy.add({ groups: "node", data: data });
+            var data = id ? {
+                id: id,
+                owner: result
+            } : {
+                owner: result,
+            };
+            var cyNode = cy.add({
+                groups: "node",
+                data: data
+            });
             result.ID = cyNode.id();
         }
         if (result) result.OnLoad();
@@ -86,8 +113,8 @@ export default class Graph {
         this.UserPanning = false;
         this.UserZooming = false;
         this.OnReady();
-        this.OnBox(function () { });
-        this.OnTap(function () { });
+        this.OnBox(function () {});
+        this.OnTap(function () {});
     }
 
     OnBox(callback) {
@@ -118,7 +145,9 @@ export default class Graph {
             callback(_this);
 
             tapNumber++;
-            setTimeout(() => { tapNumber = 0; }, 300);
+            setTimeout(() => {
+                tapNumber = 0;
+            }, 300);
             if (tapNumber == 2) {
                 var position = event.position;
                 var location = new Point(position.x, position.y);
@@ -129,7 +158,10 @@ export default class Graph {
     }
 
     PanBy(x, y) {
-        this.Refrence.panBy({ x: x, y: y });
+        this.Refrence.panBy({
+            x: x,
+            y: y
+        });
     }
 
     ReDraw() {

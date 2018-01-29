@@ -62,6 +62,15 @@ export default class NodeBase extends Element {
         var result = isOnX && isOnY;
         return result;
     }
+
+    IsOnPoint(point) {
+        var position = point;
+        var bounding = this.Bounding;
+        var isOnX = position.X > bounding.From.X && position.X < bounding.To.X;
+        var isOnY = position.Y > bounding.From.Y && position.Y < bounding.To.Y;
+        var result = isOnX && isOnY;
+        return result;
+    }
 }
 
 

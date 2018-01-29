@@ -4,9 +4,13 @@ export default class AlternativeBase extends Node {
 
     constructor(refrence) {
         super(refrence);
-        this.OnSelfTapStartHandler = function () { };
-        this.OnSelfTapEndHandler = function () { };
+        this.OnSelfTapStartHandler = function () {};
+        this.OnSelfTapEndHandler = function () {};
+
+        //this.ID=AlternativeBase.i;
     }
+
+
 
     get Selected() {
         return super.Selected;
@@ -18,11 +22,16 @@ export default class AlternativeBase extends Node {
     }
 
 
+    static i = 0;
+
     OnLoad() {
         super.OnLoad();
+        AlternativeBase.i++;
+        //this.Data('index', AlternativeBase.i + '     ' + AlternativeBase.i);
+        this.Data('index', AlternativeBase.i);
         this.Selectable = false;
-        this.OnSelfTapStart(function () { });
-        this.OnSelfTapEnd(function () { });
+        this.OnSelfTapStart(function () {});
+        this.OnSelfTapEnd(function () {});
     }
 
     OnSelfTapStart(callback) {

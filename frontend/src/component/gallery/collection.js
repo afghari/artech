@@ -1,8 +1,9 @@
-import Container from "../graph/container";
 import Alternative from "./alternative";
 import Point from "../graph/point";
+import CollectionBase from "./collectionbase";
 
-export default class Collection extends Container {
+export default class Collection extends CollectionBase {
+
     constructor(refrence) {
         super(refrence);
     }
@@ -16,7 +17,9 @@ export default class Collection extends Container {
         this.Selectable = false;
     }
 
-    get Alternatives() { return super.Nodes; }
+    get Alternatives() {
+        return super.Nodes;
+    }
 
     Makeup() {
         var alternatives = this.Alternatives;
@@ -38,6 +41,9 @@ export default class Collection extends Container {
             }
             i++;
         });
+        var pos = this.Position;
+        this.Position = new Point(0, 0);
+        this.Position = pos;
     }
 
     OnLoad() {
@@ -46,6 +52,7 @@ export default class Collection extends Container {
         this.Selectable = false;
         this.registerOnBoxHandler();
         this.registerOnTap();
+        this.registerOnDragAndDrop();
     }
 
     registerOnTap() {
@@ -54,8 +61,7 @@ export default class Collection extends Container {
         this.OnTapHandler = function () {
             if (_this.Graph.Modifier1) {
                 _this.Selected = false;
-            }
-            else {
+            } else {
                 _this.Selected = true;
             }
         }
@@ -67,4 +73,72 @@ export default class Collection extends Container {
             _this.Selected = !_this.Graph.Modifier1;
         }
     }
+
+
+    registerOnDragAndDrop() {
+        var _this = this;
+        this.OnTapStart(function () {
+            var graph = _this.Graph;
+            if (graph.Modifier3 || graph.Modifier2) {
+                graph.BoxSelectionEnabled = false;
+                var collections = graph.SelectedItems.Collections;
+                collections.forEach(collection => {
+                    collection.Selected = true;
+                    collection.PreviousPosition = collection.Position;
+                });
+            }
+        });
+
+        this.OnTapEnd(function () {
+
+            var graph = _this.Graph;
+            if (graph.Modifier3) {
+                var collections = graph.SelectedItems.Collections;
+                var alternatives = [];
+                collections.forEach(collection => {
+                    collection.Alternatives.forEach(alternative => {
+                        alternatives.push(alternative);
+                    });
+                });
+
+                var collection = graph.Add(Collection);
+                collection.Position = _this.Position;
+                collection.Expand();
+                alternatives.forEach(function (alternative) {
+                    var a = graph.Add(Alternative);
+                    collection.Append(a);
+                });
+                collection.Makeup();
+            } else if (graph.Modifier2) {
+
+                var collections = graph.SelectedItems.Collections;
+                var alternatives = [];
+                collections.forEach(collection => {
+                    collection.Alternatives.forEach(alternative => {
+                        alternatives.push(alternative);
+                    });
+                });
+
+                var pos = graph.MousePosition;
+                var targetCollection = graph.Collections.filter(e =>
+                    (e.Selected == false && e.IsOnPoint(pos))
+                )[0];
+                if (targetCollection) {
+                    //console.log(targetCollection);
+                    alternatives.forEach(alternative => {
+                        var newAlternative = graph.Add(Alternative);
+                        targetCollection.Append(newAlternative);
+                    });
+                    targetCollection.Makeup();
+                }
+
+                collections.forEach(collection => {
+                    collection.Position = collection.PreviousPosition;
+                });
+            }
+            graph.BoxSelectionEnabled = true;
+        });
+    }
+
+
 }

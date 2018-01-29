@@ -12,11 +12,22 @@ export default class Gallery extends Graph {
         this._modifier1 = false;
         this._modifier2 = false;
         this._modifier3 = false;
+        this._mousePosition = new Point(-1, -1);
     }
 
-    get Modifier1() { return this._modifier1; }
-    get Modifier2() { return this._modifier2; }
-    get Modifier3() { return this._modifier3; }
+    get Modifier1() {
+        return this._modifier1;
+    }
+    get Modifier2() {
+        return this._modifier2;
+    }
+    get Modifier3() {
+        return this._modifier3;
+    }
+
+    get MousePosition() {
+        return this._mousePosition;
+    }
 
     get Alternatives() {
         var nodes = this.Nodes;
@@ -27,7 +38,9 @@ export default class Gallery extends Graph {
         return result;
     }
 
-    get Collections() { return super.Containers; }
+    get Collections() {
+        return super.Containers;
+    }
 
     get Dependents() {
         var alternatives = this.Alternatives;
@@ -45,7 +58,7 @@ export default class Gallery extends Graph {
 
     Append(alternative) {
         var independent = !alternative.Generator;
-        var result = independent ? this.Add(Alternative) :  this.AppendDependent(alternative);
+        var result = independent ? this.Add(Alternative) : this.AppendDependent(alternative);
         return result;
     }
 
@@ -60,6 +73,7 @@ export default class Gallery extends Graph {
         super.OnLoad();
         this.setGalleryHeight();
         this.registerModifiers();
+        this.registerMousePosition();
         this.registerOnClick();
         this.registerDoubleTap();
         this.registerOnTap();
@@ -71,6 +85,14 @@ export default class Gallery extends Graph {
         $(window).on('resize load', function (event) {
             var height = $(document).height();
             $(id).height(height);
+        });
+    }
+
+    registerMousePosition() {
+        var _this = this;
+        $(window).mousemove(function (event) {
+            _this.MousePosition.X = event.pageX;
+            _this.MousePosition.Y = event.pageY;
         });
     }
 
@@ -95,10 +117,8 @@ export default class Gallery extends Graph {
                 middleClick = true;
                 e.preventDefault();
             }
-            if(e.which===3)
-            {
-                _this.SelectedItems.Alternatives.forEach((e) => { e.Selected = false; });
-                _this.SelectedItems.Collections.forEach((e) => { e.Selected = false; });
+            if (e.which === 3) {
+                _this.SelectedItems.Unselect();
             }
         });
         $(window).on('mouseup', function (e) {
@@ -112,7 +132,10 @@ export default class Gallery extends Graph {
         var lastPos = null;
         $(window).on('mousemove', function (e) {
             if (middleClick) {
-                lastPos = { x: e.clientX, y: e.clientY }
+                lastPos = {
+                    x: e.clientX,
+                    y: e.clientY
+                }
                 setTimeout(() => {
                     var deltaX = lastPos.x - e.clientX;
                     var deltaY = lastPos.y - e.clientY;
@@ -130,14 +153,12 @@ export default class Gallery extends Graph {
                     _this.Alternatives.forEach(function (alternative) {
                         alternative.Selected = false;
                     });
-                }
-                else if (_this.Modifier1) {
+                } else if (_this.Modifier1) {
                     _this.Collections.forEach(function (collection) {
                         collection.Selected = false;
                     });
                 }
-            }
-            else {
+            } else {
                 if (element instanceof Collection) {
                     element.OnTapHandler(element);
                 }
@@ -151,15 +172,12 @@ export default class Gallery extends Graph {
             if (!element) {
                 if (_this.Modifier2 && _this.Modifier3) {
                     _this.createDependents(location);
-                }
-                else if (_this.Modifier2) {
+                } else if (_this.Modifier2) {
                     _this.createIndependentAlternatives(location);
-                }
-                else {
+                } else {
                     _this.createMergedCollection(location);
                 }
-            }
-            else { }
+            } else {}
         }
     }
 
@@ -236,5 +254,22 @@ class GallerySelectedItems {
             return isSelected;
         });
         return result;
+    }
+
+    Unselect() {
+        this.UnselectAlternatives();
+        this.UnselectCollections();
+    }
+
+    UnselectAlternatives() {
+        this.Alternatives.forEach((e) => {
+            e.Selected = false;
+        });
+    }
+
+    UnselectCollections() {
+        this.Collections.forEach((e) => {
+            e.Selected = false;
+        });
     }
 }

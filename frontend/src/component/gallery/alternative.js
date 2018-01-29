@@ -32,16 +32,15 @@ export default class Alternative extends AlternativeBase {
         this.OnTapHandler = function () {
 
             if (graph.Modifier1 && graph.Modifier2) {
-                graph.Alternatives.forEach(function (a) { a.Selected = false; });
+                graph.Alternatives.forEach(function (a) {
+                    a.Selected = false;
+                });
                 _this.Selected = true;
-            }
-            else if (graph.Modifier1) {
+            } else if (graph.Modifier1) {
                 _this.Selected = false;
-            }
-            else if (graph.Modifier3) {
+            } else if (graph.Modifier3) {
 
-            }
-            else {
+            } else {
                 //if (_this.Selected === false) _this.Selected = true;
                 //_this.Selected = !_this.Selected;
                 _this.Selected = true;
@@ -51,21 +50,76 @@ export default class Alternative extends AlternativeBase {
 
     registerOnSelfDragAndDrop() {
         var _this = this;
-        //var parent = this.Parent;
+        var graph = _this.Graph;
 
         this.OnSelfTapStartHandler = function () {
-            _this.Parent = null;
+
+            _this.Selected = true;
+            var alternatives = _this.Graph.SelectedItems.Alternatives;
+
+            if (graph.Modifier1) {
+                graph.BoxSelectionEnabled = false;
+                alternatives.forEach(alternative => {
+                    alternative.Parent = null;
+                });
+            } else {
+                alternatives.forEach(alternative => {
+                    alternative.PreviousPosition = alternative.Position;
+                });
+            }
         }
 
         this.OnSelfTapEndHandler = function () {
+
             var containers = _this.Graph.Containers;
-            containers.forEach(container => {
-                //_this.Parent = _this.IsOn(container) ? container : null;
-                if (_this.IsOn(container)) {
-                    _this.Parent = container;
-                    //console.log(container.ID);
-                }
-            });
+            var alternatives = _this.Graph.SelectedItems.Alternatives;
+
+            if (graph.Modifier1) {
+                graph.BoxSelectionEnabled = true;
+                containers.forEach(container => {
+                    if (_this.IsOn(container)) {
+                        alternatives.forEach(alternative => {
+                            alternative.Parent = container;
+                            //console.log(alternative.PreviousPosition);
+                        });
+                    }
+                });
+            } else {
+
+
+                alternatives.forEach(alternative => {
+
+                    var isOnGallery = true;
+                    var hasNewParent = false;
+
+                    containers.forEach(container => {
+                        if (alternative.IsOn(container)) {
+                            isOnGallery = false;
+                            if (container != alternative.Parent) {
+                                if (alternative.Parent == null) {
+                                    hasNewParent = true;
+                                    alternative.Parent = container;
+                                } else {
+
+                                    var newAlternative = _this.Graph.Add(Alternative);
+                                    newAlternative.Position = alternative.Position;
+                                    newAlternative.Parent = container;
+                                    newAlternative.Selected = true;
+                                    alternative.Selected = false;
+                                    alternative.Position = alternative.PreviousPosition;
+                                }
+                            } else {
+
+                            }
+                        }
+                    });
+
+                    if (!hasNewParent && isOnGallery && alternative.Parent != null) {
+                        alternative.Position = alternative.PreviousPosition;
+                    }
+
+                });
+            }
         }
     }
 
@@ -74,8 +128,7 @@ export default class Alternative extends AlternativeBase {
         this.OnBoxHandler = function () {
             if (_this.Graph.Modifier1 && _this.Graph.Modifier2) {
                 _this.Selected = false;
-            }
-            else if (_this.Graph.Modifier2) {
+            } else if (_this.Graph.Modifier2) {
                 _this.Selected = true;
             }
         }
@@ -92,8 +145,7 @@ export default class Alternative extends AlternativeBase {
                     dependents.forEach(function (dependent) {
                         dependent.Class('child');
                     });
-                }
-                else {
+                } else {
                     _this.Generator.Class('generator');
                     var dependents = _this.Generator.Dependents;
                     dependents.forEach(function (dependent) {
@@ -110,8 +162,7 @@ export default class Alternative extends AlternativeBase {
                 dependents.forEach(function (dependent) {
                     dependent.UnClass('child');
                 });
-            }
-            else {
+            } else {
                 _this.Generator.UnClass('generator');
                 var dependents = _this.Generator.Dependents;
                 dependents.forEach(function (dependent) {
