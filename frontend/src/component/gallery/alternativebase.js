@@ -2,12 +2,10 @@ import Node from "../graph/node";
 
 export default class AlternativeBase extends Node {
 
-    constructor(refrence) {
-        super(refrence);
+    constructor() {
+        super();
         this.OnSelfTapStartHandler = function () {};
         this.OnSelfTapEndHandler = function () {};
-
-        //this.ID=AlternativeBase.i;
     }
 
 
@@ -22,13 +20,8 @@ export default class AlternativeBase extends Node {
     }
 
 
-    static i = 0;
-
     OnLoad() {
         super.OnLoad();
-        AlternativeBase.i++;
-        //this.Data('index', AlternativeBase.i + '     ' + AlternativeBase.i);
-        this.Data('index', AlternativeBase.i);
         this.Selectable = false;
         this.OnSelfTapStart(function () {});
         this.OnSelfTapEnd(function () {});

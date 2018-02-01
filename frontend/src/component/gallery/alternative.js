@@ -2,9 +2,9 @@ import AlternativeBase from "./alternativebase";
 
 export default class Alternative extends AlternativeBase {
 
-    // constructor(refrence) {
-    //     super(refrence);
-    // }
+    constructor() {
+        super();
+    }
 
     get Dependents() {
         var _this = this;
@@ -16,8 +16,25 @@ export default class Alternative extends AlternativeBase {
         return result;
     }
 
+    get Independents() {
+        var _this = this;
+        var independents = this.Graph.Independents;
+        var result = independents.filter(function (independent) {
+            var isGenerator = independent.Generator.ID == _this.ID;
+            return isGenerator;
+        });
+        return result;
+    }
+
+    Clone()
+    {
+        var result=new this.constructor();
+        return result;
+    }
+
     OnLoad() {
         super.OnLoad();
+        this.HandleLabel();
         this.Class('alternative');
         this.registerOnTap();
         this.registerOnSelfDragAndDrop();
@@ -25,6 +42,13 @@ export default class Alternative extends AlternativeBase {
         this.registerOnMouseOverAndOut();
     }
 
+    static index = 0;
+    DependentIndex = 0;
+    IndependentIndex = 0;
+    HandleLabel() {
+        Alternative.index++;
+        this.Data('label', Alternative.index);
+    }
 
     registerOnTap() {
         var _this = this;
@@ -100,8 +124,9 @@ export default class Alternative extends AlternativeBase {
                                     hasNewParent = true;
                                     alternative.Parent = container;
                                 } else {
-
-                                    var newAlternative = _this.Graph.Add(Alternative);
+                                    var newAlternative = alternative.Clone();
+                                    _this.Graph.Push(newAlternative);
+                                    //_this.Graph.Add(Alternative);
                                     newAlternative.Position = alternative.Position;
                                     newAlternative.Parent = container;
                                     newAlternative.Selected = true;
@@ -139,36 +164,32 @@ export default class Alternative extends AlternativeBase {
         var gallery = _this.Graph;
         this.OnMouseOverHandler = function () {
             if (gallery.Modifier3 && !gallery.Modifier2) {
-                if (!_this.Generator) {
-                    _this.Class('generator');
-                    var dependents = _this.Dependents;
-                    dependents.forEach(function (dependent) {
-                        dependent.Class('child');
-                    });
-                } else {
-                    _this.Generator.Class('generator');
-                    var dependents = _this.Generator.Dependents;
-                    dependents.forEach(function (dependent) {
-                        dependent.Class('child');
-                    });
-                }
+                var element = !_this.Generator ? _this : _this.Generator;
+                var independents = element.Independents;
+                var dependents = element.Dependents;
+                element.Class('generator');
+                independents.forEach(function (independent) {
+                    independent.Class('child-independent');
+                });
+                dependents.forEach(function (dependent) {
+                    dependent.Class('child-dependent');
+                });
+                
             }
         }
 
         this.OnMouseOutHandler = function () {
-            if (!_this.Generator) {
-                _this.UnClass('generator');
-                var dependents = _this.Dependents;
-                dependents.forEach(function (dependent) {
-                    dependent.UnClass('child');
-                });
-            } else {
-                _this.Generator.UnClass('generator');
-                var dependents = _this.Generator.Dependents;
-                dependents.forEach(function (dependent) {
-                    dependent.UnClass('child');
-                });
-            }
+            var element = !_this.Generator ? _this : _this.Generator;
+            var independents = element.Independents;
+            var dependents = element.Dependents;
+            element.UnClass('generator');
+            independents.forEach(function (independent) {
+                independent.UnClass('child-independent');
+            });
+            dependents.forEach(function (dependent) {
+                dependent.UnClass('child-dependent');
+            });
+            
         }
     }
 }

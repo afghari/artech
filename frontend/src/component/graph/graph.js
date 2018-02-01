@@ -8,10 +8,10 @@ export default class Graph {
     constructor(id) {
         this.ID = id;
         this.Refrence = null;
-        this.OnReady = function () {}
-        this.OnBoxHandler = function () {}
-        this.OnTapHandler = function () {}
-        this.OnDoubleTapHandler = function () {}
+        this.OnReady = function () { }
+        this.OnBoxHandler = function () { }
+        this.OnTapHandler = function () { }
+        this.OnDoubleTapHandler = function () { }
     }
 
     get Zoomable() {
@@ -76,25 +76,26 @@ export default class Graph {
     }
 
     Add(type, id = null) {
-        var cy = this.Refrence;
         var result = new type();
-        result.Graph = this;
         result.ID = id;
-        if (type.prototype instanceof NodeBase) {
-            var data = id ? {
-                id: id,
-                owner: result
-            } : {
-                owner: result,
-            };
-            var cyNode = cy.add({
-                groups: "node",
-                data: data
-            });
-            result.ID = cyNode.id();
-        }
-        if (result) result.OnLoad();
+        result = this.Push(result);
+        result.Graph = this;
         return result;
+    }
+
+    Push(element) {
+        //var result = element;
+        element.Graph = this;
+        if (element instanceof NodeBase) {
+            var data = {};
+            if (element.ID) data.id = element.ID;
+            data.owner = element;
+            var cy = this.Refrence;
+            var cyNode = cy.add({ groups: "node", data: data });
+            element.ID = cyNode.id();
+            element.OnLoad();
+        }
+        return element;
     }
 
     Get(id) {
@@ -105,7 +106,8 @@ export default class Graph {
     Remove(element) {
         var cy = this.Refrence;
         var cyElement = this.getCyElement(element.ID);
-        cy.remove(cyElement);
+        var result = cy.remove(cyElement);
+        return result;
     }
 
     OnLoad() {
@@ -113,8 +115,8 @@ export default class Graph {
         this.UserPanning = false;
         this.UserZooming = false;
         this.OnReady();
-        this.OnBox(function () {});
-        this.OnTap(function () {});
+        this.OnBox(function () { });
+        this.OnTap(function () { });
     }
 
     OnBox(callback) {

@@ -35,9 +35,10 @@ export default class CytoExtend extends cytoscape {
                 {
                     selector: '.alternative',
                     style: {
-                        'content': 'data(index)',
+                        'content': 'data(label)',
                         'text-valign': 'center',
                         'text-halign': 'center',
+                        'font-size': '14px',
                         'color': 'white',
                         'background-color': '#5b6366'
                     }
@@ -50,19 +51,35 @@ export default class CytoExtend extends cytoscape {
                     }
                 },
                 {
+                    selector: '.independent',
+                    style: {
+                        'font-size': '10px',
+                        "text-wrap": "wrap",
+                        'background-color': '#696d70'
+                    }
+                },
+                {
                     selector: '.dependent',
                     style: {
+                        'font-size': '10px',
+                        "text-wrap": "wrap",
                         'background-color': '#9eaeb2'
                     }
                 },
                 {
                     selector: '.generator',
                     style: {
-                        'background-color': '#b774f2'
+                        'background-color': '#e8bb68'
                     }
                 },
                 {
-                    selector: '.child',
+                    selector: '.child-independent',
+                    style: {
+                        'background-color': '#70d185'
+                    }
+                },
+                {
+                    selector: '.child-dependent',
                     style: {
                         'background-color': '#dabcf4'
                     }

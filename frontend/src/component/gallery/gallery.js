@@ -4,6 +4,7 @@ import Alternative from './alternative';
 import Collection from './collection';
 import Point from '../graph/point';
 import Dependent from './dependent';
+import Independent from './independent';
 
 export default class Gallery extends Graph {
 
@@ -51,21 +52,31 @@ export default class Gallery extends Graph {
         return result;
     }
 
+    get Independents() {
+        var alternatives = this.Alternatives;
+        var result = alternatives.filter(function (alternative) {
+            var isIndependent = alternative instanceof Independent;
+            return isIndependent;
+        });
+        return result;
+    }
+
     get SelectedItems() {
         var result = new GallerySelectedItems(this);
         return result;
     }
 
-    Append(alternative) {
-        var independent = !alternative.Generator;
-        var result = independent ? this.Add(Alternative) : this.AppendDependent(alternative);
+    AppendIndependent(alternative) {
+        var result = new Independent();
+        result.Generator = alternative;
+        result = this.Push(result);
         return result;
     }
 
     AppendDependent(alternative) {
-        var generator = alternative instanceof Dependent ? alternative.Generator : alternative;
-        var result = this.Add(Dependent);
-        result.Generator = generator;
+        var result = new Dependent();
+        result.Generator = alternative;
+        result = this.Push(result);
         return result;
     }
 
@@ -75,6 +86,7 @@ export default class Gallery extends Graph {
         this.registerModifiers();
         this.registerMousePosition();
         this.registerOnClick();
+        this.registerOnKeyDown();
         this.registerDoubleTap();
         this.registerOnTap();
     }
@@ -103,6 +115,20 @@ export default class Gallery extends Graph {
             _this._modifier2 = e.altKey;
             _this._modifier3 = e.ctrlKey;
             e.preventDefault();
+        });
+    }
+
+    registerOnKeyDown() {
+        var _this = this;
+        $(window).on('keydown', function (e) {
+            //delete key
+            if (e.which == 46) {
+                var itemsToDelete = _this.SelectedItems.All;
+                itemsToDelete.forEach(item => {
+                    _this.Remove(item);
+                })
+                e.preventDefault();
+            }
         });
     }
 
@@ -177,7 +203,7 @@ export default class Gallery extends Graph {
                 } else {
                     _this.createMergedCollection(location);
                 }
-            } else {}
+            } else { }
         }
     }
 
@@ -190,7 +216,10 @@ export default class Gallery extends Graph {
             collections.forEach(collection => {
                 var alternatives = collection.Alternatives;
                 alternatives.forEach(alternative => {
-                    var newAlternative = this.Append(alternative);
+
+                    //var newAlternative = this.Add(alternative);
+                    var newAlternative = alternative.Clone();
+                    this.Push(newAlternative);
                     newCollection.Append(newAlternative);
                 });
             });
@@ -203,7 +232,7 @@ export default class Gallery extends Graph {
         var newAlternatives = [];
         var alternatives = this.SelectedItems.Alternatives;
         alternatives.forEach(alternative => {
-            var newAlternative = this.Append(alternative);
+            var newAlternative = this.AppendIndependent(alternative);
             newAlternatives.push(newAlternative);
         });
         this.Arrange(newAlternatives, location);
@@ -234,6 +263,14 @@ export default class Gallery extends Graph {
 class GallerySelectedItems {
     constructor(owner) {
         this.Owner = owner;
+    }
+
+    get All()
+    {
+        var result=[];
+        result=result.concat(this.Alternatives);
+        result=result.concat(this.Collections);
+        return result;
     }
 
     get Alternatives() {

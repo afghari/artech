@@ -33,7 +33,7 @@ export default class NodeBase extends Element {
                 var index = children.indexOf(this.Refrence);
                 if (index > -1) {
                     children.splice(index, 1);
-                    parent.Refrence._private.children=children;
+                    parent.Refrence._private.children = children;
                 }
             }
         }
@@ -47,9 +47,11 @@ export default class NodeBase extends Element {
         return result;
     }
     set Position(value) {
-        var deltaX = value.X - this.Position.X;
-        var deltaY = value.Y - this.Position.Y;
-        this.Move(deltaX, deltaY);
+        if (value) {
+            var deltaX = value.X - this.Position.X;
+            var deltaY = value.Y - this.Position.Y;
+            this.Move(deltaX, deltaY);
+        }
     }
 
     Move(x, y) { this.Refrence.shift({ x: x, y: y }); }

@@ -28,6 +28,7 @@ export default class Element {
         else this.Refrence.data(name, value);
     }
 
+
     get Refrence() {
         var cy = this.Graph.Refrence;
         var result = cy.$('#' + this.ID)[0];
@@ -139,4 +140,5 @@ export default class Element {
             callback(_this);
         });
     }
+    
 }

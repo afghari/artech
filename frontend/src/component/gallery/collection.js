@@ -78,13 +78,22 @@ export default class Collection extends CollectionBase {
     registerOnDragAndDrop() {
         var _this = this;
         this.OnTapStart(function () {
+            _this.Selected = true;
             var graph = _this.Graph;
-            if (graph.Modifier3 || graph.Modifier2) {
+            if (graph.Modifier2 || graph.Modifier3) {
                 graph.BoxSelectionEnabled = false;
                 var collections = graph.SelectedItems.Collections;
                 collections.forEach(collection => {
                     collection.Selected = true;
                     collection.PreviousPosition = collection.Position;
+                });
+            }
+            else if(graph.Modifier1)
+            {
+                graph.SelectedItems.Unselect();
+                _this.Alternatives.forEach(function(alternative)
+                {
+                    alternative.Selected=true;
                 });
             }
         });
@@ -105,10 +114,18 @@ export default class Collection extends CollectionBase {
                 collection.Position = _this.Position;
                 collection.Expand();
                 alternatives.forEach(function (alternative) {
-                    var a = graph.Add(Alternative);
-                    collection.Append(a);
+                    //var a = graph.Add(Alternative);
+                    var newAlternative = alternative.Clone();
+                    graph.Push(newAlternative);
+                    collection.Append(newAlternative);
                 });
                 collection.Makeup();
+
+                collections.forEach(collection => {
+                    collection.Position = collection.PreviousPosition;
+                });
+                graph.SelectedItems.Unselect();
+
             } else if (graph.Modifier2) {
 
                 var collections = graph.SelectedItems.Collections;
@@ -126,7 +143,9 @@ export default class Collection extends CollectionBase {
                 if (targetCollection) {
                     //console.log(targetCollection);
                     alternatives.forEach(alternative => {
-                        var newAlternative = graph.Add(Alternative);
+                        var newAlternative = alternative.Clone();
+                        graph.Push(newAlternative);
+                        //var newAlternative = graph.Add(Alternative);
                         targetCollection.Append(newAlternative);
                     });
                     targetCollection.Makeup();
@@ -135,6 +154,7 @@ export default class Collection extends CollectionBase {
                 collections.forEach(collection => {
                     collection.Position = collection.PreviousPosition;
                 });
+                graph.SelectedItems.Unselect();
             }
             graph.BoxSelectionEnabled = true;
         });
