@@ -99,8 +99,8 @@ export default class Collection extends CollectionBase {
         });
 
         this.OnTapEnd(function () {
-
             var graph = _this.Graph;
+            if(graph.SelectedItems.Collections.length==1) _this.Selected = false;
             if (graph.Modifier3) {
                 var collections = graph.SelectedItems.Collections;
                 var alternatives = [];
