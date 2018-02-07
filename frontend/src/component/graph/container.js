@@ -1,6 +1,6 @@
 import ContainerBase from "./containerbase";
 import Grip from "./grip";
-import NodeBase from "./nodebase";
+import NodeBase from "./graphnodebase";
 
 export default class Container extends ContainerBase {
     constructor(refrence) {

@@ -1,4 +1,4 @@
-import Node from "../graph/node";
+import Node from "../graph/graphnode";
 
 export default class AlternativeBase extends Node {
 

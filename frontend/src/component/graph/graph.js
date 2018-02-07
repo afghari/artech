@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import CytoExtend from './cytoextend';
-import NodeBase from './nodebase';
+import NodeBase from './graphnodebase';
 import ContainerBase from './containerbase';
 import Point from './point';
 export default class Graph {

@@ -1,4 +1,4 @@
-import Node from "./node";
+import Node from "./graphnode";
 
 export default class ContainerBase extends Node {
     // constructor(refrence) {

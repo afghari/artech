@@ -1,4 +1,4 @@
-import Node from "./node";
+import Node from "./graphnode";
 
 export default class Grip extends Node {
     constructor(refrence) {

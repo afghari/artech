@@ -1,4 +1,4 @@
-import NodeBase from './nodebase';
+import NodeBase from './graphnodebase';
 
 export default class Node extends NodeBase {
     constructor() {
